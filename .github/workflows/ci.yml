@@ -21,7 +21,7 @@ jobs:
             do go_test
 
       - name: Docker build
-        uses: dagger/dagger-form-github@v3
+        uses: dagger/dagger-for-github@v3
         with:
           version: 0.2
           cmds: |
