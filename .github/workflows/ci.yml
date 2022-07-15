@@ -1,10 +1,13 @@
 name: ci
 
-on:
+on: 
   push:
     branches:
-      - main
-
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+  
 jobs:
   dagger:
     runs-on: ubuntu-latest
@@ -20,9 +23,10 @@ jobs:
             project update
             do go_test
 
-      - name: Docker build
+      - name: Build
         uses: dagger/dagger-for-github@v3
         with:
           version: 0.2
           cmds: |
-            do docker_build
+            project update
+            do go_build
