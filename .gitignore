@@ -24,6 +24,3 @@ go.work
 ### Go Patch ###
 /vendor/
 /Godeps/
-
-### dagger ###
-cue.mod/
