@@ -1,3 +1,3 @@
-module github.com/jjuarez/dagger-golang-example
+module hello
 
 go 1.18
