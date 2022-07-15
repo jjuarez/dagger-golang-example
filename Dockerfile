@@ -2,16 +2,23 @@
 FROM golang:1.18-alpine3.16 AS builder
 
 WORKDIR /build
+
+COPY go.mod ./
+RUN go mod download
+
 COPY . ./
 RUN go build -o ./service
 
 
-FROM alpine:3.16 AS runtime
+FROM scratch AS runtime
 LABEL \
   org.label-schema.name="dagger-golang-example" \
   org.label-schema.description="A dagger.io example for a golang application" \
   org.label-schema.url="https://github.com/jjuarez/dagger-golang-example/"
 
-WORKDIR /app
+WORKDIR /
+COPY --from=builder /etc/passwd /etc/passwd
 COPY --from=builder /build/service ./
-CMD [ "/app/service" ]
+USER 1001
+EXPOSE 8080/TCP
+CMD [ "/service" ]
