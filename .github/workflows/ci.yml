@@ -1,5 +1,4 @@
----
-name: golang-example
+name: ci
 
 on:
   push:
