@@ -9,7 +9,7 @@ on:
       - '*'
   
 jobs:
-  dagger:
+  go:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository
