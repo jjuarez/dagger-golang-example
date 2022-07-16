@@ -9,7 +9,8 @@ import (
 
 const envVariableKey = "DEFAULT_NAME"
 
-func main() {
+func setupRouter() *gin.Engine {
+	gin.ForceConsoleColor()
 	router := gin.Default()
 
 	router.GET("/sayhi", func(context *gin.Context) {
@@ -22,5 +23,11 @@ func main() {
 		greetingMessage := greeting.Greeting(name)
 		context.JSON(http.StatusOK, gin.H{"message": greetingMessage})
 	})
-	router.Run() // listen and server on 0.0.0.0:8080
+
+	return router
+}
+
+func main() {
+	router := setupRouter()
+	router.Run() // listen and server on 0.0.0.0:${PORT}
 }
