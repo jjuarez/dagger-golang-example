@@ -1,4 +1,4 @@
-name: ci
+name: dagger/ci/golang
 
 on: 
   push:
@@ -12,21 +12,28 @@ jobs:
   go:
     runs-on: ubuntu-latest
     steps:
-      - name: Clone repository
+      - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Install dagger
+        uses: dagger/dagger-for-github@v3
+        with:
+          install-only: true
+
+      - name: Dagger project update
+        uses: dagger/dagger-for-github@v3
+        with:
+          version: 0.2
+        run: dagger project update
 
       - name: Testing
         uses: dagger/dagger-for-github@v3
         with:
           version: 0.2
-          cmds: |
-            project update
-            do go_test
+        run: dagger do go_test --log-format plain --log-level debug
 
       - name: Build
         uses: dagger/dagger-for-github@v3
         with:
           version: 0.2
-          cmds: |
-            project update
-            do go_build
+        run: dagger do go_build --log-format plain --log-level debug

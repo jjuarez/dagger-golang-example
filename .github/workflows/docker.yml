@@ -1,4 +1,4 @@
-name: docker
+name: dagger/docker
 
 on:
   pull_request:
@@ -10,21 +10,28 @@ jobs:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     steps:
-      - name: Clone repository
+      - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Install dagger
+        uses: dagger/dagger-for-github@v3
+        with:
+          install-only: true
+
+      - name: Dagger project update
+        uses: dagger/dagger-for-github@v3
+        with:
+          version: 0.2
+        run: dagger project update
 
       - name: Docker build
         uses: dagger/dagger-for-github@v3
         with:
           version: 0.2
-          cmds: |
-            project update
-            do docker_build
+        run: do docker_build --log-format plain --log-level debug
 
       - name: Docker push
         uses: dagger/dagger-for-github@v3
         with:
           version: 0.2
-          cmds: |
-            project update
-            do docker_push --log-level=debug
+        run: do docker_push --log-format plain --log-level debug
