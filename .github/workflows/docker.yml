@@ -23,7 +23,7 @@ jobs:
         run: dagger project update
 
       - name: Docker build
-        run: do docker_build --log-format plain --log-level ${DAGGER_LOGLEVEL}
+        run: dagger do docker_build --log-format plain --log-level ${DAGGER_LOGLEVEL}
 
       - name: Docker push
-        run: do docker_push --log-format plain --log-level ${DAGGER_LOGLEVEL}
+        run: dagger do docker_push --log-format plain --log-level ${DAGGER_LOGLEVEL}
