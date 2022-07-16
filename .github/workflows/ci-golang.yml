@@ -1,0 +1,32 @@
+name: dagger/ci/golang
+
+on: 
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+  
+jobs:
+  ci-golang:
+    runs-on: ubuntu-latest
+    env:
+      DAGGER_LOGLEVEL: "info"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dagger
+        uses: dagger/dagger-for-github@v3
+        with:
+          install-only: true
+
+      - name: Dagger project update
+        run: dagger project update
+
+      - name: Dagger do test
+        run: dagger do test --log-format plain --log-level ${DAGGER_LOGLEVEL}
+
+      - name: Dagger do build
+        run: dagger do build --log-format plain --log-level ${DAGGER_LOGLEVEL}

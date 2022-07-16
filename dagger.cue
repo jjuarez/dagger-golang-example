@@ -8,9 +8,10 @@ import (
 
 dagger.#Plan & {
 	client: env: {
-		DOCKER_USERNAME: string | "jjuarez"
+		DOCKER_USERNAME: string
 		DOCKER_PASSWORD: dagger.#Secret
 	}
+
 	client: filesystem: ".": read: {
 		contents: dagger.#FS
 		exclude: [
@@ -23,9 +24,15 @@ dagger.#Plan & {
 	}
 
 	actions: {
+		params: image: {
+			registry:  "docker.io"
+			namespace: "jjuarez"
+			name:      "dagger-golang-example"
+			tag:       "latest"
+		}
+
 		docker_build: docker.#Dockerfile & {
 			source: client.filesystem.".".read.contents
-			dockerfile: path: "Dockerfile"
 			auth: {
 				"index.docker.io": {
 					username: client.env.DOCKER_USERNAME
@@ -34,17 +41,17 @@ dagger.#Plan & {
 			}
 		}
 
-		docker_push: docker.#Push & {
+		release: docker.#Push & {
 			image: docker_build.output
-			dest:  "docker.io/jjuarez/dagger-golang-example:latest"
+			dest:  "\(params.image.registry)/\(params.image.namespace)/\(params.image.name):\(params.image.tag)"
 		}
 
-		go_build: go.#Build & {
+		build: go.#Build & {
 			source:  client.filesystem.".".read.contents
 			package: "./..."
 		}
 
-		go_test: go.#Test & {
+		test: go.#Test & {
 			source:  client.filesystem.".".read.contents
 			package: "./..."
 		}

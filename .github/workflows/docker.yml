@@ -1,4 +1,4 @@
-name: docker
+name: dagger/docker
 
 on:
   pull_request:
@@ -6,28 +6,24 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    env:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+      DAGGER_LOGLEVEL: "debug"
     steps:
-      - name: Clone repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Docker build
+      - name: Install dagger
         uses: dagger/dagger-for-github@v3
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         with:
-          version: 0.2
-          cmds: |
-            project update
-            do docker_build
+          install-only: true
 
-      - name: Docker push
-        uses: dagger/dagger-for-github@v3
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        with:
-          version: 0.2
-          cmds: |
-            project update
-            do docker_push --log-level=debug
+      - name: Dagger project update
+        run: dagger project update
+
+      - name: Docker build
+        run: dagger do docker_build --log-format plain --log-level ${DAGGER_LOGLEVEL}
+
+      - name: Docker release
+        run: dagger do release --log-format plain --log-level ${DAGGER_LOGLEVEL}
