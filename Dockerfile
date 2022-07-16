@@ -2,12 +2,10 @@
 FROM golang:1.18-alpine3.16 AS builder
 
 WORKDIR /build
-
 COPY go.mod go.sum ./
 RUN go mod download
-
 COPY . ./
-RUN go build -o ./service
+RUN go build -o ./service ./cmd/*.go
 
 
 FROM scratch AS runtime
