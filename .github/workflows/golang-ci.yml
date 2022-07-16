@@ -26,7 +26,7 @@ jobs:
         run: dagger project update
 
       - name: Dagger do test
-        run: dagger do go_test --log-format plain --log-level ${DAGGER_LOGLEVEL}
+        run: dagger do test --log-format plain --log-level ${DAGGER_LOGLEVEL}
 
       - name: Dagger do build
-        run: dagger do go_build --log-format plain --log-level ${DAGGER_LOGLEVEL}
+        run: dagger do build --log-format plain --log-level ${DAGGER_LOGLEVEL}
