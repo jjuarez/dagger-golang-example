@@ -9,7 +9,7 @@ on:
       - '*'
   
 jobs:
-  go:
+  ci-golang:
     runs-on: ubuntu-latest
     env:
       DAGGER_LOGLEVEL: "info"
