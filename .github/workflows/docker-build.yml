@@ -24,4 +24,4 @@ jobs:
         run: dagger project update
 
       - name: Docker build
-        run: dagger do docker_build --log-format plain --log-level ${DAGGER_LOGLEVEL}
+        run: dagger do docker_build
