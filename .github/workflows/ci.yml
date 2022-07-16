@@ -11,6 +11,8 @@ on:
 jobs:
   go:
     runs-on: ubuntu-latest
+    env:
+      DAGGER_LOGLEVEL: "info"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -22,18 +24,10 @@ jobs:
 
       - name: Dagger project update
         uses: dagger/dagger-for-github@v3
-        with:
-          version: 0.2
         run: dagger project update
 
-      - name: Testing
-        uses: dagger/dagger-for-github@v3
-        with:
-          version: 0.2
-        run: dagger do go_test --log-format plain --log-level debug
+      - name: Dagger do test
+        run: dagger do go_test --log-format plain --log-level ${DAGGER_LOGLEVEL}
 
-      - name: Build
-        uses: dagger/dagger-for-github@v3
-        with:
-          version: 0.2
-        run: dagger do go_build --log-format plain --log-level debug
+      - name: Dagger do build
+        run: dagger do go_build --log-format plain --log-level ${DAGGER_LOGLEVEL}
