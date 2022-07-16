@@ -25,7 +25,6 @@ dagger.#Plan & {
 	actions: {
 		docker_build: docker.#Dockerfile & {
 			source: client.filesystem.".".read.contents
-			dockerfile: path: "Dockerfile"
 			auth: {
 				"index.docker.io": {
 					username: client.env.DOCKER_USERNAME
