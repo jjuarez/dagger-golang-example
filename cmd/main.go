@@ -1,14 +1,26 @@
 package main
 
 import (
-	"fmt"
-	"os"
+	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/jjuarez/dagger-golang-example/internal/greeting"
 )
 
-const envVariableKey = "NAME"
+const envVariableKey = "DEFAULT_NAME"
 
 func main() {
-	fmt.Printf(greeting.Greeting(os.Getenv(envVariableKey)))
+	router := gin.Default()
+
+	router.GET("/sayhi", func(context *gin.Context) {
+		greetingMessage := greeting.Greeting("")
+		context.JSON(http.StatusOK, gin.H{"message": greetingMessage})
+	})
+
+	router.GET("/sayhi/:name", func(context *gin.Context) {
+		name := context.Param("name")
+		greetingMessage := greeting.Greeting(name)
+		context.JSON(http.StatusOK, gin.H{"message": greetingMessage})
+	})
+	router.Run() // listen and server on 0.0.0.0:8080
 }
