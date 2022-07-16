@@ -9,9 +9,16 @@ import (
 
 const envVariableKey = "DEFAULT_NAME"
 
+// Version ... The version of the API
+var Version = "v0.0.0"
+
 func setupRouter() *gin.Engine {
 	gin.ForceConsoleColor()
 	router := gin.Default()
+
+	router.GET("/version", func(context *gin.Context) {
+		context.JSON(http.StatusOK, gin.H{"version": Version})
+	})
 
 	router.GET("/sayhi", func(context *gin.Context) {
 		greetingMessage := greeting.Greeting("")
