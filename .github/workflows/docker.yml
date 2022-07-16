@@ -12,6 +12,9 @@ jobs:
 
       - name: Docker build
         uses: dagger/dagger-for-github@v3
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         with:
           version: 0.2
           cmds: |
