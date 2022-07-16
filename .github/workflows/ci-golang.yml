@@ -12,7 +12,8 @@ jobs:
   ci-golang:
     runs-on: ubuntu-latest
     env:
-      DAGGER_LOGLEVEL: "info"
+      DAGGER_LOG_FORMAT: "plain"
+      DAGGER_LOG_LEVEL: "info"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -26,7 +27,7 @@ jobs:
         run: dagger project update
 
       - name: Dagger do test
-        run: dagger do test --log-format plain --log-level ${DAGGER_LOGLEVEL}
+        run: dagger do test
 
       - name: Dagger do build
-        run: dagger do build --log-format plain --log-level ${DAGGER_LOGLEVEL}
+        run: dagger do build

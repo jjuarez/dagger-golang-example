@@ -9,7 +9,8 @@ jobs:
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      DAGGER_LOGLEVEL: "debug"
+      DAGGER_LOG_FORMAT: "plain"
+      DAGGER_LOG_LEVEL: "debug"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
