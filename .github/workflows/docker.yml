@@ -25,5 +25,5 @@ jobs:
       - name: Docker build
         run: dagger do docker_build --log-format plain --log-level ${DAGGER_LOGLEVEL}
 
-      - name: Docker push
-        run: dagger do docker_push --log-format plain --log-level ${DAGGER_LOGLEVEL}
+      - name: Docker release
+        run: dagger do release --log-format plain --log-level ${DAGGER_LOGLEVEL}
