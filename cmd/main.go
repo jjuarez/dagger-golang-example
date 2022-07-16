@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/jjuarez/dagger-golang-example/greeting"
+	"github.com/jjuarez/dagger-golang-example/internal/greeting"
 )
 
 const envVariableKey = "NAME"
