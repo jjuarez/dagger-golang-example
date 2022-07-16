@@ -30,4 +30,4 @@ jobs:
           version: 0.2
           cmds: |
             project update
-            do docker_push
+            do docker_push --log-level=debug
