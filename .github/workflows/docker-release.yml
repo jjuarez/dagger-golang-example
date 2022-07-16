@@ -1,16 +1,23 @@
-name: dagger/docker
+name: dagger/docker/release
 
 on:
-  pull_request:
+  push:
+    tags:
+      - 'v*.*.*'
 
 jobs:
-  docker:
+  docker-release:
     runs-on: ubuntu-latest
     env:
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      DAGGER_LOGLEVEL: "debug"
+      DAGGER_LOG_FORMAT: "plain"
+      DAGGER_LOG_LEVEL: "debug"
     steps:
+      - name: Get tag
+        uses: actions/checkout@v2
+        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -22,8 +29,7 @@ jobs:
       - name: Dagger project update
         run: dagger project update
 
-      - name: Docker build
-        run: dagger do docker_build --log-format plain --log-level ${DAGGER_LOGLEVEL}
-
       - name: Docker release
-        run: dagger do release --log-format plain --log-level ${DAGGER_LOGLEVEL}
+        env:
+          VERSION: ${{ steps.vars.output.tag }}
+        run: dagger do release

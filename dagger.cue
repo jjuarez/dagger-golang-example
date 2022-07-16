@@ -8,6 +8,7 @@ import (
 
 dagger.#Plan & {
 	client: env: {
+		VERSION:         string | *"0.0.0"
 		DOCKER_USERNAME: string
 		DOCKER_PASSWORD: dagger.#Secret
 	}
@@ -28,7 +29,7 @@ dagger.#Plan & {
 			registry:  "docker.io"
 			namespace: "jjuarez"
 			name:      "dagger-golang-example"
-			tag:       "latest"
+			tag:       client.env.VERSION
 		}
 
 		docker_build: docker.#Dockerfile & {
@@ -48,6 +49,7 @@ dagger.#Plan & {
 
 		build: go.#Build & {
 			source:  client.filesystem.".".read.contents
+			ldflags: "-X main.Version=\(params.image.tag)"
 			package: "./..."
 		}
 
